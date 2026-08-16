@@ -2,7 +2,7 @@
 
 **CEE 双闸开关 ↔ PowerGrid 双向电网桥** —— Minecraft 1.21.1 NeoForge 附属模组
 
-让 [Create: Electro Energetics (CEE)](https://www.curseforge.com/minecraft/mc-mods/create-electro-energetics) 的**双闸开关（double switch）**可以直接接入 [Create: PowerGrid (PG)](https://www.curseforge.com/minecraft/mc-mods/create-powergrid) 的电网，两个独立电力仿真器之间实现**双向电压/电流转换（1:1）**。
+让 [Create: Electro Energetics (CEE)](https://www.curseforge.com/minecraft/mc-mods/create-electro-energetics) 的**双闸开关（double switch）**可以直接接入 [Create: PowerGrid (PG)](https://www.curseforge.com/minecraft/mc-mods/power-grid) 的电网，两个独立电力仿真器之间实现**双向电压/电流转换（1:1）**。
 
 > ⚠️ **AI 生成声明**：本模组由 AI 助手（Nous Research Hermes Agent）辅助编写——包括架构设计、源代码实现、调试与构建流程。详见 [LICENSE.md](LICENSE.md)。
 
