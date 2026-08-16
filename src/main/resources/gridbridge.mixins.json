@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "com.gridbridge.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "CutOffSwitchBlockMixin",
+    "CutOffSwitchDeviceMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
