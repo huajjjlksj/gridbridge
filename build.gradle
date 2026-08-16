@@ -1,0 +1,131 @@
+plugins {
+    id 'java-library'
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.neoforged.gradle.userdev' version '7.0.170'
+}
+
+tasks.named('wrapper', Wrapper).configure {
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+version = mod_version
+group = mod_group_id
+
+repositories {
+    mavenLocal()
+    maven { url = 'https://neoforged.forgecdn.net/releases/' }
+    mavenCentral()
+}
+
+base {
+    archivesName = mod_id
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+
+// Extract create's jarjar'd dependencies (catnip lives in ponder, plus Registrate/flywheel)
+def explodedDir = file("$buildDir/exploded-libs")
+tasks.register('explodeCreateJarjars', Copy) {
+    from(zipTree(file('libs/create-1.21.1-6.0.10.jar'))) {
+        include 'META-INF/jarjar/*.jar'
+    }
+    into file("$buildDir/create-jarjars")
+}
+tasks.register('explodeJarjars', Copy) {
+    dependsOn explodeCreateJarjars
+    from fileTree("$buildDir/create-jarjars") { include '*.jar' }
+    into explodedDir
+}
+tasks.named('compileJava') {
+    dependsOn explodeJarjars
+}
+
+runs {
+    configureEach {
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
+        systemProperty 'forge.logging.console.level', 'debug'
+        modSource project.sourceSets.main
+    }
+    client {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
+    server {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+        argument '--nogui'
+    }
+    gameTestServer {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
+    data {
+        arguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+dependencies {
+    implementation "net.neoforged:neoforge:${neo_version}"
+
+    // Compile-only deps: these mods are installed in the pack at runtime.
+    compileOnly files(
+            'libs/electroenergetics-1.21.1-1.1.1.jar',
+            'libs/powergrid-mc1.21.1-0.5.5.1.jar',
+            'libs/create-1.21.1-6.0.10.jar',
+            'libs/sable-neoforge-1.21.1-2.0.3.jar',
+            'libs/architectury-13.0.11-neoforge.jar'
+    )
+    // Exploded create jarjars (catnip/Registrate/flywheel) as a directory classpath entry.
+    compileOnly files(explodedDir)
+}
+
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            neo_version_range      : neo_version_range,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand replaceProperties
+    }
+}
+
+publishing {
+    publications {
+        register('mavenJava', MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/repo"
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
