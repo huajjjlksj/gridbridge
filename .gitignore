@@ -1,0 +1,25 @@
+# Gradle / build
+build/
+.gradle/
+out/
+classes/
+*.class
+
+# IntelliJ / IDE
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# NeoForge / run
+run/
+logs/
+
+# 编译期依赖（本地 flatDir）
+libs/
+
+# 系统
+.DS_Store
+Thumbs.db
