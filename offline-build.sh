@@ -44,7 +44,7 @@ props = {
     'loader_version_range': '[4,)',
     'mod_license': 'MIT',
     'mod_id': 'gridbridge',
-    'mod_version': '1.0.0',
+    'mod_version': '1.0.1',
     'mod_name': 'Grid Bridge',
     'mod_authors': 'Hermes',
     'mod_description': 'Lets PowerGrid wires connect to Create Electro Energetics double switches, with bidirectional power conversion.',
@@ -60,6 +60,6 @@ PYEOF
 
 cp $PROJ/src/main/resources/gridbridge.mixins.json $PROJ/src/main/resources/pack.mcmeta $OUT/classes/
 mkdir -p $PROJ/build/libs
-jar cf $PROJ/build/libs/gridbridge-1.0.0.jar -C $OUT/classes .
+jar cf $PROJ/build/libs/gridbridge-1.0.1.jar -C $OUT/classes .
 echo "=== jar built ==="
-ls -la $PROJ/build/libs/gridbridge-1.0.0.jar
+ls -la $PROJ/build/libs/gridbridge-1.0.1.jar
