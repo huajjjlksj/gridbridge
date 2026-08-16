@@ -23,6 +23,14 @@ public class BridgeState {
     public volatile boolean connected;
     /** Whether the bridge BE has been attached and initialized. */
     public volatile boolean bridgeReady;
+    /** PG 侧供电有效：闸刀端子 0 和端子 1 都有电线连接（电源正负极都接上）。 */
+    public volatile boolean pgPowered;
+    /** CEE 侧注入功率（device 记录，BE 用于 PG 侧等效负载反馈），Watts。 */
+    public volatile double pgPowerInjected;
+    /** PG 侧等效负载实际输出功率（真实能量），Watts。 */
+    public volatile double pgPowerOut;
+    /** PG 侧开关支路电流（CEE->PG 等效负载用），Amperes。 */
+    public volatile double switchCurrent;
 
     private static final ConcurrentHashMap<Key, BridgeState> MAP = new ConcurrentHashMap<>();
 
