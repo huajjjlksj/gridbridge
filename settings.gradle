@@ -1,0 +1,9 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+        maven { url = 'https://neoforged.forgecdn.net/releases/' }
+    }
+}
+
+rootProject.name = 'gridbridge'
