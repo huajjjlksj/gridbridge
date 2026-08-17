@@ -33,7 +33,7 @@ and build scripts were produced with AI collaboration.
 
 GridBridge is an addon/companion mod for:
 - Create: Electro Energetics (CEE) - https://www.curseforge.com/minecraft/mc-mods/create-electro-energetics
-- Create: PowerGrid (PG) - https://www.curseforge.com/minecraft/mc-mods/create-powergrid
+- Create: PowerGrid (PG) - https://www.curseforge.com/minecraft/mc-mods/power-grid
 
 It bridges the two power systems through the CEE double cut-off switch,
 providing bidirectional voltage/current conversion between CEE and PowerGrid
