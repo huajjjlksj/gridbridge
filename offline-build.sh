@@ -27,7 +27,7 @@ BRIGADIER="$LIB/com/mojang/brigadier/1.3.10/brigadier-1.3.10.jar"
 FML="$LIB/net/neoforged/fancymodloader/loader/4.0.43/loader-4.0.43.jar"
 DFU="$LIB/com/mojang/datafixerupper/8.0.16/datafixerupper-8.0.16.jar"
 CEE="$MODS/electroenergetics-1.21.1-1.1.1.jar"
-PG="$MODS/[机械动力：交错电网] powergrid-mc1.21.1-0.5.5.1.jar"
+PG="$MODS/[机械动力：交错电网] powergrid-mc1.21.1-0.6.0.1.jar"
 SABLE="$MODS/sable-neoforge-1.21.1-2.0.3.jar"
 ARCH="$MODS/architectury-13.0.11-neoforge.jar"
 
@@ -44,7 +44,7 @@ props = {
     'loader_version_range': '[4,)',
     'mod_license': 'MIT',
     'mod_id': 'gridbridge',
-    'mod_version': '1.0.1',
+    'mod_version': '1.0.2',
     'mod_name': 'Grid Bridge',
     'mod_authors': 'Hermes',
     'mod_description': 'Lets PowerGrid wires connect to Create Electro Energetics double switches, with bidirectional power conversion.',
@@ -60,6 +60,6 @@ PYEOF
 
 cp $PROJ/src/main/resources/gridbridge.mixins.json $PROJ/src/main/resources/pack.mcmeta $OUT/classes/
 mkdir -p $PROJ/build/libs
-jar cf $PROJ/build/libs/gridbridge-1.0.1.jar -C $OUT/classes .
+jar cf $PROJ/build/libs/gridbridge-1.0.2.jar -C $OUT/classes .
 echo "=== jar built ==="
-ls -la $PROJ/build/libs/gridbridge-1.0.1.jar
+ls -la $PROJ/build/libs/gridbridge-1.0.2.jar
