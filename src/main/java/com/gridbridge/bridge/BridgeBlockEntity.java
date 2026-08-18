@@ -19,6 +19,9 @@ import org.patryk3211.powergrid.electricity.base.TerminalBoundingBox;
 import org.patryk3211.powergrid.electricity.sim.SwitchedWire;
 import org.patryk3211.powergrid.electricity.sim.node.FloatingNode;
 import org.patryk3211.powergrid.electricity.sim.node.VoltageSourceCoupling;
+import org.patryk3211.powergrid.electricity.wire.BlockWireEndpoint;
+import org.patryk3211.powergrid.electricity.wire.IWireEndpoint;
+import org.patryk3211.powergrid.electricity.creative.CreativeSourceBlock;
 
 import java.util.Arrays;
 import java.util.List;
@@ -190,15 +193,28 @@ public class BridgeBlockEntity extends SmartBlockEntity implements IElectric, IE
 
         // 物理严格：PG 侧供电有效 = 端子 0 与端子 1 都有电线（电源正负极都接上）。
         // 只接正极（负极悬空）不算供电 -> CEE 侧不注入 -> 电动机不转。
-        boolean hasT0 = false, hasT1 = false;
+        // ===== pgPowered 检测（方案 B）：端子连接的电线另一端是"创造电源"方块 =====
+        // 不依赖端子编号——创造电源接 T0/T1 或 T2/T3 都能识别（两侧都能当输入）；
+        // 负载（电动机/灯泡）接任何端子都不会误判（两侧都能当输出）。
+        boolean pgPoweredRaw = false;
         if (electricBehaviour != null) {
             for (var ep : electricBehaviour.getConnections().keySet()) {
-                int t = ep.getTerminal();
-                if (t == 0) hasT0 = true;
-                else if (t == 1) hasT1 = true;
+                var wires = electricBehaviour.getConnections().get(ep);
+                if (wires == null) continue;
+                for (var wire : wires) {
+                    IWireEndpoint other = wire.getEndpoint1() == ep ? wire.getEndpoint2() : wire.getEndpoint1();
+                    if (other instanceof BlockWireEndpoint bwe) {
+                        BlockPos otherPos = bwe.getPos();
+                        if (otherPos != null
+                                && level.getBlockState(otherPos).getBlock() instanceof CreativeSourceBlock) {
+                            pgPoweredRaw = true;
+                            break;
+                        }
+                    }
+                }
+                if (pgPoweredRaw) break;
             }
         }
-        boolean pgPoweredRaw = hasT0 && hasT1;
         // 防抖：连续 20 tick 同状态才切换（消除连接检测跳动 -> 消除 lineSource 反复横跳 -> 消除烧线循环）
         if (pgPoweredRaw == lastPgPoweredRaw) {
             if (++pgPoweredStableTicks >= PG_POWERED_DEBOUNCE && pgPoweredRaw != st.pgPowered) {
