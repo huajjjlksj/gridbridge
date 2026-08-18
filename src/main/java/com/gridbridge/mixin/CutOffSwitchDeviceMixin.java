@@ -93,7 +93,9 @@ public class CutOffSwitchDeviceMixin {
             for (int pos2 = 0; pos2 < 4; pos2 += 2) {
                 builder.node(10 + pos2);
                 bridges.ground(new InWorldNode(10 + pos2, pos), GND_S);
-                builder.energyLimitedSource(pos2, 10 + pos2, 100000.0, vInj, 1.0);
+                        // CEE 电压源方向：n2 - n1 = V（n2 是正端）。之前 (pos2, 10+pos2) 把节点当 n1 -> 节点被拉到 -V（负）。
+        // 反传 (10+pos2, pos2)：节点 pos2 是正端 -> CEE 侧正极显示 +V（PG 正极 -> CEE 正电压）。
+        builder.energyLimitedSource(10 + pos2, pos2, 100000.0, vInj, 1.0);
             }
             // 注入时接地（线2：节点 1/3——CEE 设备负极回路参考）。
             // 注意：只能在注入（PG->CEE）时加——CEE->PG 方向（电池在）绝不接地，
